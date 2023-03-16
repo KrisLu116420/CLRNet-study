@@ -12,6 +12,7 @@ from clrnet.datasets import build_dataloader
 
 
 def main():
+    # 参数相关
     args = parse_args()
     os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(
         str(gpu) for gpu in args.gpus)
@@ -29,8 +30,10 @@ def main():
 
     cudnn.benchmark = True
 
+    # 模型搭建
     runner = Runner(cfg)
 
+    # 执行模式
     if args.validate:
         runner.validate()
     elif args.test:
