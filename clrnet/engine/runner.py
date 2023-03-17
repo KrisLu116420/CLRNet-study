@@ -23,7 +23,7 @@ class Runner(object):
         np.random.seed(cfg.seed)
         random.seed(cfg.seed)
         self.cfg = cfg
-        self.recorder = build_recorder(self.cfg)
+        self.recorder = build_recorder(self.cfg)   # 初始化logger、存储config、复制不ignore的文件到workdir内
         self.net = build_net(self.cfg)
         self.net = MMDataParallel(self.net,
                                   device_ids=range(self.cfg.gpus)).cuda()
