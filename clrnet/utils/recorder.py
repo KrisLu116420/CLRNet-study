@@ -48,7 +48,7 @@ class Recorder(object):
         self.logger.info('Config: \n' + cfg.text)
 
         self.save_cfg(cfg)
-        self.cp_projects(self.work_dir)
+        self.cp_projects(self.work_dir)  # 将不满足.gitignore里pattern的文件复制到work_dir内
 
         # scalars
         self.epoch = 0
@@ -65,6 +65,9 @@ class Recorder(object):
             cfg_file.write(cfg.text)
 
     def cp_projects(self, to_path):
+        """
+        根据.gitignore定义的pattern，找出符合相应pattern的文件。
+        """
         with open('./.gitignore', 'r') as fp:
             ign = fp.read()
         ign += '\n.git'
@@ -73,10 +76,13 @@ class Recorder(object):
         all_files = {
             os.path.join(root, name)
             for root, dirs, files in os.walk('./') for name in files
-        }
+        }    # all_files是一个set
         matches = spec.match_files(all_files)
-        matches = set(matches)
-        to_cp_files = all_files - matches
+        matches = set(matches)  # 找到的满足.gitignore中定义的pattern的文件
+        """
+        将不满足.gitignore定义的pattern的文件复制到定义path下
+        """
+        to_cp_files = all_files - matches  # 删除满足.gitignore定义的pattern的文件
         for f in to_cp_files:
             dirs = os.path.join(to_path, 'code', os.path.split(f[2:])[0])
             if not os.path.exists(dirs):
