@@ -46,7 +46,11 @@ class Runner(object):
         if not self.cfg.load_from and not self.cfg.finetune_from:
             return
         load_network(self.net, self.cfg.load_from, finetune_from=self.cfg.finetune_from, logger=self.recorder.logger)
-
+        """
+        load：直接从文件获取模型参数
+        finetune：从文件中获取模型的部分参数
+        """
+        
     def train_epoch(self, epoch, train_loader):
         self.net.train()
         end = time.time()
