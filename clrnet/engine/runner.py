@@ -24,11 +24,11 @@ class Runner(object):
         random.seed(cfg.seed)
         self.cfg = cfg
         self.recorder = build_recorder(self.cfg)   # 初始化logger、存储config、复制不ignore的文件到workdir内
-        self.net = build_net(self.cfg)
+        self.net = build_net(self.cfg)    # 只build了net，type是detector
         self.net = MMDataParallel(self.net,
                                   device_ids=range(self.cfg.gpus)).cuda()
         self.recorder.logger.info('Network: \n' + str(self.net))
-        self.resume()
+        self.resume()    # 分为直接load和finetune两种方式，如果有finetune，优先使用finetune。
         self.optimizer = build_optimizer(self.cfg, self.net)
         self.scheduler = build_scheduler(self.cfg, self.optimizer)
         self.metric = 0.
