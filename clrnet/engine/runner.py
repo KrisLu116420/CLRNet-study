@@ -29,8 +29,8 @@ class Runner(object):
                                   device_ids=range(self.cfg.gpus)).cuda()
         self.recorder.logger.info('Network: \n' + str(self.net))
         self.resume()    # 分为直接load和finetune两种方式，如果有finetune，优先使用finetune。
-        self.optimizer = build_optimizer(self.cfg, self.net)
-        self.scheduler = build_scheduler(self.cfg, self.optimizer)
+        self.optimizer = build_optimizer(self.cfg, self.net)   # 通过配置，调用torch.optim里面的优化器
+        self.scheduler = build_scheduler(self.cfg, self.optimizer)   # 通过配置，调用torch.optim.lr_scheduler里面的优化器
         self.metric = 0.
         self.val_loader = None
         self.test_loader = None
